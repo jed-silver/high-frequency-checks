@@ -28,7 +28,7 @@ program ipachecklogic, rclass
 
 	* define temporary files 
 	tempfile tmp org
-	save `org'
+	save "`org'"
 
 	* define temporary variable
 	tempvar test
@@ -98,8 +98,8 @@ program ipachecklogic, rclass
 		gettoken cond1 assert : assert, p(";")
 		gettoken cond2 condition : condition, p(";")
 		local assert : subinstr local assert ";" ""
-		local condition : subinstr local condition ";" ""
-
+		if "`cond2'" ~= ";" local condition : subinstr local condition ";" ""
+		
 		replace `test' = .
 		replace message = ""
 		forval a = 1 / `varnum' {
@@ -149,12 +149,12 @@ program ipachecklogic, rclass
 		}
 
 		* append violations to the temporary data set
-		saveappend using `tmp' if `test' == 0, ///
+		saveappend using "`tmp'" if `test' == 0, ///
 			keep("`keeplist'")
 	}
 
 	* import compiled list of violations
-	use `tmp', clear
+	use "`tmp'", clear
 
 	* if there are no violations
 	if `=_N' == 0 {
@@ -192,7 +192,7 @@ program ipachecklogic, rclass
 	}
 
 	* revert to original
-	use `org', clear
+	use "`org'", clear
 
 	}
 	di ""
@@ -214,14 +214,14 @@ program saveappend
 		keep `keep' `touse'
 	}
 
-	append using `using'
+	append using "`using'"
 
 	if "`sort'" != "" {
 		sort `sort'
 	}
 
 	drop `touse'
-	save `using', replace
+	save "`using'", replace
 
 	restore
 end

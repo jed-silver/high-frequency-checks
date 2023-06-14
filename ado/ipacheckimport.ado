@@ -72,7 +72,7 @@ program ipacheckimport, rclass
 
 			* add a temporary variable to check for matching boxes
 			g `tmp' = _n
-			save `tmpsheet', replace
+			save "`tmpsheet'", replace
 
 			* the set up sheet is different from all others
 			if `"`sheet'"' == "0. setup" {
@@ -273,7 +273,7 @@ program ipacheckimport, rclass
 						}
 						mata: copies = (`i' == 1 ? `length' : copies \ `length')
 	    			}
-	    			use `tmpsheet', clear
+	    			use "`tmpsheet'", clear
 	    			mata: st_store(., st_addvar("float", "copies"), copies)
 	    			expand copies
 	    			sort `tmp'
@@ -320,7 +320,7 @@ program ipacheckimport, rclass
 				
 				if inlist(`"`sheet'"', "backchecks") {
 					if `rows' > 0 {
-						foreach var in okrange_min okrange_max {
+						foreach var in variable okrange_min okrange_max {
 							cap confirm string variable `var' 
 							if _rc {
 								tostring `var', replace
